@@ -2,8 +2,10 @@ using InventoryManagement.Infrastructure;
 using InventoryManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using InventoryManagement.Application;
-using InventoryManagement.Application.Interfaces.Services;
 using InventoryManagement.Application.Services;
+using InventoryManagement.Application.Interfaces.Services;
+using FluentValidation;
+using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -42,6 +44,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         return services;
     }

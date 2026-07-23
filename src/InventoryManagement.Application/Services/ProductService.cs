@@ -5,7 +5,6 @@ using InventoryManagement.Application.Interfaces.Repositories;
 using InventoryManagement.Application.Interfaces.Services;
 using InventoryManagement.Application.Mappings;
 using InventoryManagement.Domain.Entities;
-
 namespace InventoryManagement.Application.Services;
 
 public class ProductService : IProductService

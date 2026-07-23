@@ -1,6 +1,5 @@
 ﻿using InventoryManagement.Application.Common;
 using InventoryManagement.Application.DTOs.Products;
-
 namespace InventoryManagement.Application.Interfaces.Services;
 
 public interface IProductService
