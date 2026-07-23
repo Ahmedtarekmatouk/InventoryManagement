@@ -56,16 +56,16 @@ dotnet test
 
 ## Solution Structure
 
+```
 src/
-├── InventoryManagement.Domain Entities, no external dependencies
-├── InventoryManagement.Application Business logic, DTOs, interfaces, validation
-├── InventoryManagement.Infrastructure EF Core, repositories, persistence
-└── InventoryManagement.API Controllers, middleware, composition root
+├── InventoryManagement.Domain          Entities, no external dependencies
+├── InventoryManagement.Application     Business logic, DTOs, interfaces, validation
+├── InventoryManagement.Infrastructure  EF Core, repositories, persistence
+└── InventoryManagement.API             Controllers, middleware, composition root
 tests/
-└── InventoryManagement.Tests Unit tests for application services
-client/ Angular application
-
-
+└── InventoryManagement.Tests           Unit tests for application services
+client/                                 Angular application
+```
 Dependencies point inward: the API depends on Application, Infrastructure implements interfaces defined in Application, and Domain depends on nothing.
 
 ## API Endpoints
