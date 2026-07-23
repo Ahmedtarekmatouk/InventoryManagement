@@ -20,11 +20,4 @@ public static class DependencyInjection
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         return services;
     }
-    public static IServiceCollection AddApplication(this IServiceCollection services)
-    {
-        services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<ICategoryService, CategoryService>();
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        return services;
-    }
 }

@@ -3,7 +3,7 @@ using InventoryManagement.API.Middlewares;
 using InventoryManagement.Infrastructure;
 using InventoryManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-
+using InventoryManagement.Application;
 const string AngularCorsPolicy = "AngularClient";
 
 var builder = WebApplication.CreateBuilder(args);
