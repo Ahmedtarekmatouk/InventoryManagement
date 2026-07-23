@@ -1,4 +1,4 @@
-﻿@'
+﻿
 # Inventory Management System
 
 A full-stack inventory management application built with ASP.NET Core 8 and Angular, implementing CRUD operations for products and categories.
