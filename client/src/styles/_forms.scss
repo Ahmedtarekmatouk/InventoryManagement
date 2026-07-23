@@ -1,5 +1,5 @@
-@use '../../../../styles/variables' as *;
-@use '../../../../styles/mixins' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 .form-card {
   @include card-surface;
@@ -8,6 +8,16 @@
   gap: $spacing-lg;
   padding: $spacing-xl;
   max-width: 720px;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+
+    @include respond-below($breakpoint-mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
 
   &__actions {
     display: flex;

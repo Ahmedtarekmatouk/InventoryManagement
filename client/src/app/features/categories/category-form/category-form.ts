@@ -9,7 +9,6 @@ import { NotificationService } from '../../../core/services/notification.service
   selector: 'app-category-form',
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './category-form.html',
-  styleUrl: './category-form.scss'
 })
 export class CategoryFormComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);

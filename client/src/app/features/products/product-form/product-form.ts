@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+﻿import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Category } from '../../../core/models/category.model';
@@ -11,7 +11,6 @@ import { ProductService } from '../../../core/services/product.service';
   selector: 'app-product-form',
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './product-form.html',
-  styleUrl: './product-form.scss'
 })
 export class ProductFormComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);

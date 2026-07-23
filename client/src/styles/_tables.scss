@@ -1,5 +1,5 @@
-@use '../../../../styles/variables' as *;
-@use '../../../../styles/mixins' as *;
+@use 'variables' as *;
+@use 'mixins' as *;
 
 .table-card {
   @include card-surface;
@@ -72,6 +72,37 @@
 
   &__actions-header {
     width: 1%;
+  }
+
+  &__sort {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: 0;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+
+    &:hover {
+      color: $color-primary;
+    }
+
+    &--active {
+      color: $color-primary;
+    }
+  }
+
+  &__sort-icon {
+    font-size: 0.7rem;
+    opacity: 0.35;
+
+    .table__sort--active & {
+      opacity: 1;
+    }
   }
 }
 

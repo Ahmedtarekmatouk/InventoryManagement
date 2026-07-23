@@ -8,8 +8,7 @@ import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-d
 @Component({
   selector: 'app-category-list',
   imports: [RouterLink, ConfirmDialogComponent],
-  templateUrl: './category-list.html',
-  styleUrl: './category-list.scss'
+  templateUrl: './category-list.html'
 })
 export class CategoryListComponent implements OnInit {
   private readonly categoryService = inject(CategoryService);
