@@ -1,0 +1,110 @@
+<section class="page">
+  <header class="page__header">
+    <h1 class="page__title">Products</h1>
+    <a class="button button--primary" routerLink="/products/new">Add product</a>
+  </header>
+
+  <div class="filters">
+    <div class="form-field filters__search">
+      <label class="form-field__label" for="search">Search</label>
+      <input
+        id="search"
+        type="text"
+        class="form-field__control"
+        placeholder="Search by name or description"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="applyFilters()" />
+    </div>
+
+    <div class="form-field">
+      <label class="form-field__label" for="category">Category</label>
+      <select id="category" class="form-field__control" [(ngModel)]="selectedCategoryId">
+        <option [ngValue]="null">All categories</option>
+        @for (category of categories(); track category.id) {
+          <option [ngValue]="category.id">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filters__actions">
+      <button type="button" class="button button--primary" (click)="applyFilters()">Apply</button>
+      <button type="button" class="button button--secondary" (click)="clearFilters()">Reset</button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    @if (isLoading()) {
+      <p class="table-card__state">Loading products...</p>
+    } @else if (pagedProducts(); as result) {
+      @if (result.items.length === 0) {
+        <p class="table-card__state">No products match the current filters.</p>
+      } @else {
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" class="table__sort" (click)="sortBy('name')">
+                    Name
+                    @if (isSortedBy('name')) { <span>{{ sortDescending ? '▼' : '▲' }}</span> }
+                  </button>
+                </th>
+                <th>Category</th>
+                <th>
+                  <button type="button" class="table__sort" (click)="sortBy('price')">
+                    Price
+                    @if (isSortedBy('price')) { <span>{{ sortDescending ? '▼' : '▲' }}</span> }
+                  </button>
+                </th>
+                <th>
+                  <button type="button" class="table__sort" (click)="sortBy('quantity')">
+                    Quantity
+                    @if (isSortedBy('quantity')) { <span>{{ sortDescending ? '▼' : '▲' }}</span> }
+                  </button>
+                </th>
+                <th class="table__actions-header">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (product of result.items; track product.id) {
+                <tr>
+                  <td>
+                    <span class="table__primary">{{ product.name }}</span>
+                    @if (product.description) {
+                      <span class="table__secondary">{{ product.description }}</span>
+                    }
+                  </td>
+                  <td><span class="badge">{{ product.categoryName }}</span></td>
+                  <td>{{ product.price | currency }}</td>
+                  <td>{{ product.quantity }}</td>
+                  <td>
+                    <div class="table__actions">
+                      <a class="button button--secondary" [routerLink]="['/products', product.id, 'edit']">Edit</a>
+                      <button type="button" class="button button--danger" (click)="requestDeletion(product)">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <app-pagination
+          [pageNumber]="result.pageNumber"
+          [totalPages]="result.totalPages"
+          [totalCount]="result.totalCount"
+          [hasPreviousPage]="result.hasPreviousPage"
+          [hasNextPage]="result.hasNextPage"
+          (pageChanged)="goToPage($event)" />
+      }
+    }
+  </div>
+</section>
+
+@if (productPendingDeletion(); as product) {
+  <app-confirm-dialog
+    title="Delete product"
+    [message]="'Are you sure you want to delete ' + product.name + '?'"
+    (confirmed)="confirmDeletion()"
+    (cancelled)="cancelDeletion()" />
+}

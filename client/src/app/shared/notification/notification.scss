@@ -1,0 +1,48 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.notification {
+  position: fixed;
+  top: $spacing-lg;
+  right: $spacing-lg;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  max-width: 380px;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-md;
+  background-color: $color-success;
+  color: #fff;
+  box-shadow: $shadow-md;
+
+  &--error {
+    background-color: $color-danger;
+  }
+
+  &__message {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  @include respond-below($breakpoint-mobile) {
+    top: $spacing-sm;
+    right: $spacing-sm;
+    left: $spacing-sm;
+    max-width: none;
+  }
+}

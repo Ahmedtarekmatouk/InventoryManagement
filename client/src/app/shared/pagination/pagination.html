@@ -1,0 +1,23 @@
+﻿<div class="pagination">
+  <span class="pagination__summary">
+    Page {{ pageNumber() }} of {{ totalPages() }} &middot; {{ totalCount() }} items
+  </span>
+
+  <div class="pagination__controls">
+    <button
+      type="button"
+      class="button button--secondary"
+      [disabled]="!hasPreviousPage()"
+      (click)="goToPreviousPage()">
+      Previous
+    </button>
+
+    <button
+      type="button"
+      class="button button--secondary"
+      [disabled]="!hasNextPage()"
+      (click)="goToNextPage()">
+      Next
+    </button>
+  </div>
+</div>

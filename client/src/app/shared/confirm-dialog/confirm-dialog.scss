@@ -1,0 +1,43 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md;
+  background-color: rgba(15, 23, 42, 0.45);
+}
+
+.dialog {
+  @include card-surface;
+  width: 100%;
+  max-width: 420px;
+  padding: $spacing-xl;
+  box-shadow: $shadow-lg;
+
+  &__title {
+    font-size: 1.1rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__message {
+    margin: 0 0 $spacing-xl;
+    color: $color-text-muted;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+
+    @include respond-below($breakpoint-mobile) {
+      flex-direction: column-reverse;
+    }
+  }
+}

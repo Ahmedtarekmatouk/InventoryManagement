@@ -1,0 +1,47 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.app-header {
+  background-color: $color-surface;
+  border-bottom: 1px solid $color-border;
+
+  &__inner {
+    @include flex-between;
+    gap: $spacing-lg;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $spacing-md $spacing-xl;
+
+    @include respond-below($breakpoint-tablet) {
+      padding: $spacing-md;
+    }
+  }
+
+  &__brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  &__nav {
+    display: flex;
+    gap: $spacing-lg;
+  }
+
+  &__link {
+    color: $color-text-muted;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      color: $color-text;
+    }
+
+    &--active {
+      color: $color-primary;
+      border-bottom-color: $color-primary;
+    }
+  }
+}

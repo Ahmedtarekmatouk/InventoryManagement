@@ -1,0 +1,25 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.pagination {
+  @include flex-between;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  border-top: 1px solid $color-border;
+
+  &__summary {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+  }
+
+  &__controls {
+    display: flex;
+    gap: $spacing-sm;
+  }
+
+  @include respond-below($breakpoint-mobile) {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}
