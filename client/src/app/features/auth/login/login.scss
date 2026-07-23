@@ -1,0 +1,35 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: $spacing-md;
+
+  &__card {
+    @include card-surface;
+    width: 100%;
+    max-width: 420px;
+    padding: $spacing-xl;
+    text-align: center;
+    box-shadow: $shadow-md;
+  }
+
+  &__title {
+    font-size: 1.4rem;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__subtitle {
+    margin: 0 0 $spacing-xl;
+    color: $color-text-muted;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  &__button {
+    width: 100%;
+  }
+}

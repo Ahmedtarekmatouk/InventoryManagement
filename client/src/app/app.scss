@@ -44,4 +44,14 @@
       border-bottom-color: $color-primary;
     }
   }
+  &__account {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__user {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+  }
 }

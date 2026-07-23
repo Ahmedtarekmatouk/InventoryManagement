@@ -2,10 +2,17 @@
   <div class="app-header__inner">
     <span class="app-header__brand">Inventory Management</span>
 
-    <nav class="app-header__nav">
-      <a routerLink="/products" routerLinkActive="app-header__link--active" class="app-header__link">Products</a>
-      <a routerLink="/categories" routerLinkActive="app-header__link--active" class="app-header__link">Categories</a>
-    </nav>
+    @if (account(); as currentAccount) {
+      <nav class="app-header__nav">
+        <a routerLink="/products" routerLinkActive="app-header__link--active" class="app-header__link">Products</a>
+        <a routerLink="/categories" routerLinkActive="app-header__link--active" class="app-header__link">Categories</a>
+      </nav>
+
+      <div class="app-header__account">
+        <span class="app-header__user">{{ currentAccount.name ?? currentAccount.username }}</span>
+        <button type="button" class="button button--secondary" (click)="signOut()">Sign out</button>
+      </div>
+    }
   </div>
 </header>
 
