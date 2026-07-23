@@ -1,4 +1,5 @@
-﻿using InventoryManagement.Application.Interfaces.Repositories;
+﻿using FluentValidation;
+using InventoryManagement.Application.Interfaces.Repositories;
 using InventoryManagement.Application.Interfaces.Services;
 using InventoryManagement.Application.Services;
 using InventoryManagement.Infrastructure.Persistence;
@@ -6,6 +7,7 @@ using InventoryManagement.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace InventoryManagement.Infrastructure;
 
@@ -16,6 +18,13 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        return services;
+    }
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         return services;
     }
 }

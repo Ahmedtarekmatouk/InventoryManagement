@@ -1,22 +1,28 @@
+using FluentValidation.AspNetCore;
+using InventoryManagement.API.Middlewares;
 using InventoryManagement.Infrastructure;
 using InventoryManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using InventoryManagement.Application;
-using InventoryManagement.Application.Services;
-using InventoryManagement.Application.Interfaces.Services;
-using FluentValidation;
-using System.Reflection;
+
+const string AngularCorsPolicy = "AngularClient";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddCors(options =>options.AddPolicy(AngularCorsPolicy, policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
 
 await ApplyMigrationsAndSeedAsync(app);
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -25,6 +31,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(AngularCorsPolicy);
 app.UseAuthorization();
 app.MapControllers();
 
@@ -37,15 +44,4 @@ static async Task ApplyMigrationsAndSeedAsync(WebApplication app)
 
     await context.Database.MigrateAsync();
     await ApplicationDbContextSeeder.SeedAsync(context);
-}
-public static class DependencyInjection
-{
-    public static IServiceCollection AddApplication(this IServiceCollection services)
-    {
-        services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<ICategoryService, CategoryService>();
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
-        return services;
-    }
 }
