@@ -4,6 +4,7 @@ using InventoryManagement.Infrastructure;
 using InventoryManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using InventoryManagement.Application;
+using InventoryManagement.API.Extensions;
 const string AngularCorsPolicy = "AngularClient";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
+builder.Services.AddEntraIdAuthentication(builder.Configuration);
 builder.Services.AddCors(options =>options.AddPolicy(AngularCorsPolicy, policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
@@ -32,6 +33,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(AngularCorsPolicy);
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

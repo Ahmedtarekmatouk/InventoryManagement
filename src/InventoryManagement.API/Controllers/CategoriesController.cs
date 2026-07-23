@@ -1,6 +1,7 @@
 ﻿using InventoryManagement.Application.DTOs.Categories;
 using InventoryManagement.Application.Interfaces.Services;
 using InventoryManagement.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagement.API.Controllers;
@@ -8,6 +9,7 @@ namespace InventoryManagement.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class CategoriesController : ControllerBase
 {
     private readonly ICategoryService _categoryService;
