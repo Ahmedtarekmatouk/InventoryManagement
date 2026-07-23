@@ -116,9 +116,3 @@ No UI component library, object mapper or logging framework was added; the built
 ## Testing
 
 Unit tests cover the business rules of `ProductService` and `CategoryService`: not-found handling, duplicate name detection, category existence checks, soft delete behavior and paging metadata. Repositories are mocked, so the suite runs without a database.
-
-## Future Improvements
-
-- Integration tests covering the controllers and middleware
-- Role-based authorization using Entra ID app roles
-- Correlation identifiers in error responses to link a client error to a server log entry
