@@ -17,5 +17,20 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/products/product-form/product-form').then(m => m.ProductFormComponent)
   },
+  {
+    path: 'categories',
+    loadComponent: () =>
+      import('./features/categories/category-list/category-list').then(m => m.CategoryListComponent)
+  },
+  {
+    path: 'categories/new',
+    loadComponent: () =>
+      import('./features/categories/category-form/category-form').then(m => m.CategoryFormComponent)
+  },
+  {
+    path: 'categories/:id/edit',
+    loadComponent: () =>
+      import('./features/categories/category-form/category-form').then(m => m.CategoryFormComponent)
+  },
   { path: '**', redirectTo: 'products' }
 ];

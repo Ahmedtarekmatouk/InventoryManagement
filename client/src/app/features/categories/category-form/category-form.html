@@ -1,0 +1,49 @@
+<section class="page">
+  <header class="page__header">
+    <h1 class="page__title">{{ isEditMode ? 'Edit category' : 'New category' }}</h1>
+    <a class="button button--secondary" routerLink="/categories">Back to list</a>
+  </header>
+
+  @if (isLoading()) {
+    <p class="form-card__state">Loading category...</p>
+  } @else {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-field">
+        <label class="form-field__label" for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          class="form-field__control"
+          [class.form-field__control--invalid]="hasError('name', 'required') || hasError('name', 'maxlength')"
+          formControlName="name"
+          placeholder="Electronics" />
+        @if (hasError('name', 'required')) {
+          <span class="form-field__error">Name is required.</span>
+        }
+        @if (hasError('name', 'maxlength')) {
+          <span class="form-field__error">Name cannot exceed 100 characters.</span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="description">Description</label>
+        <textarea
+          id="description"
+          rows="3"
+          class="form-field__control"
+          formControlName="description"
+          placeholder="Optional description"></textarea>
+        @if (hasError('description', 'maxlength')) {
+          <span class="form-field__error">Description cannot exceed 500 characters.</span>
+        }
+      </div>
+
+      <div class="form-card__actions">
+        <a class="button button--secondary" routerLink="/categories">Cancel</a>
+        <button type="submit" class="button button--primary" [disabled]="isSaving()">
+          {{ isSaving() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create category' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>

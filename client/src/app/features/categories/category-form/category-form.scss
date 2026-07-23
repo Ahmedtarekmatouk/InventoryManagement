@@ -1,0 +1,37 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.form-card {
+  @include card-surface;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding: $spacing-xl;
+  max-width: 720px;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+    padding-top: $spacing-sm;
+    border-top: 1px solid $color-border;
+
+    @include respond-below($breakpoint-mobile) {
+      flex-direction: column-reverse;
+    }
+  }
+
+  &__state {
+    @include card-surface;
+    margin: 0;
+    padding: $spacing-xl;
+    text-align: center;
+    color: $color-text-muted;
+    font-size: 0.9rem;
+  }
+}
+
+textarea.form-field__control {
+  resize: vertical;
+  min-height: 80px;
+}

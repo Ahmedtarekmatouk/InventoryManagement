@@ -1,0 +1,60 @@
+<section class="page">
+  <header class="page__header">
+    <h1 class="page__title">Categories</h1>
+    <a class="button button--primary" routerLink="/categories/new">Add category</a>
+  </header>
+
+  <div class="table-card">
+    @if (isLoading()) {
+      <p class="table-card__state">Loading categories...</p>
+    } @else if (categories().length === 0) {
+      <p class="table-card__state">No categories have been created yet.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Products</th>
+              <th class="table__actions-header">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (category of categories(); track category.id) {
+              <tr>
+                <td>
+                  <span class="table__primary">{{ category.name }}</span>
+                  @if (category.description) {
+                    <span class="table__secondary">{{ category.description }}</span>
+                  }
+                </td>
+                <td><span class="badge">{{ category.productCount }}</span></td>
+                <td>
+                  <div class="table__actions">
+                    <a class="button button--secondary" [routerLink]="['/categories', category.id, 'edit']">Edit</a>
+                    <button
+                      type="button"
+                      class="button button--danger"
+                      [disabled]="category.productCount > 0"
+                      [title]="category.productCount > 0 ? 'Remove its products first' : 'Delete category'"
+                      (click)="requestDeletion(category)">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>
+
+@if (categoryPendingDeletion(); as category) {
+  <app-confirm-dialog
+    title="Delete category"
+    [message]="'Are you sure you want to delete ' + category.name + '?'"
+    (confirmed)="confirmDeletion()"
+    (cancelled)="cancelDeletion()" />
+}
