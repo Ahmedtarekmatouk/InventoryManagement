@@ -1,4 +1,6 @@
 ﻿using InventoryManagement.Application.Interfaces.Repositories;
+using InventoryManagement.Application.Interfaces.Services;
+using InventoryManagement.Application.Services;
 using InventoryManagement.Infrastructure.Persistence;
 using InventoryManagement.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;

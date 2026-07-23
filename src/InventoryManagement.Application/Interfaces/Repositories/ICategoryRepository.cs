@@ -12,6 +12,5 @@ public interface ICategoryRepository
     Task AddAsync(Category category, CancellationToken cancellationToken = default);
     void Update(Category category);
     void Remove(Category category);
-    Task<int> GetTotalCountAsync(CancellationToken cancellationToken = default);
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

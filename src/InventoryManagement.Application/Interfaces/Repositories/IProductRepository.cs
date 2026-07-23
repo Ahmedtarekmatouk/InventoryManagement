@@ -10,8 +10,5 @@ public interface IProductRepository
     Task<bool> ExistsWithNameAsync(string name, int? excludedProductId = null, CancellationToken cancellationToken = default);
     Task AddAsync(Product product, CancellationToken cancellationToken = default);
     void Update(Product product);
-    Task<int> GetTotalCountAsync(CancellationToken cancellationToken = default);
-    Task<int> GetTotalQuantityAsync(CancellationToken cancellationToken = default);
-    Task<decimal> GetAveragePriceAsync(CancellationToken cancellationToken = default);
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
