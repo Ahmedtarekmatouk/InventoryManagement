@@ -1,0 +1,103 @@
+<section class="page">
+  <header class="page__header">
+    <h1 class="page__title">{{ isEditMode ? 'Edit product' : 'New product' }}</h1>
+    <a class="button button--secondary" routerLink="/products">Back to list</a>
+  </header>
+
+  @if (isLoading()) {
+    <p class="form-card__state">Loading product...</p>
+  } @else {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-field">
+        <label class="form-field__label" for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          class="form-field__control"
+          [class.form-field__control--invalid]="hasError('name', 'required') || hasError('name', 'maxlength')"
+          formControlName="name"
+          placeholder="Wireless Mouse" />
+        @if (hasError('name', 'required')) {
+          <span class="form-field__error">Name is required.</span>
+        }
+        @if (hasError('name', 'maxlength')) {
+          <span class="form-field__error">Name cannot exceed 150 characters.</span>
+        }
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="description">Description</label>
+        <textarea
+          id="description"
+          rows="3"
+          class="form-field__control"
+          formControlName="description"
+          placeholder="Optional description"></textarea>
+        @if (hasError('description', 'maxlength')) {
+          <span class="form-field__error">Description cannot exceed 1000 characters.</span>
+        }
+      </div>
+
+      <div class="form-card__row">
+        <div class="form-field">
+          <label class="form-field__label" for="price">Price</label>
+          <input
+            id="price"
+            type="number"
+            step="0.01"
+            min="0"
+            class="form-field__control"
+            [class.form-field__control--invalid]="hasError('price', 'min') || hasError('price', 'required')"
+            formControlName="price" />
+          @if (hasError('price', 'required')) {
+            <span class="form-field__error">Price is required.</span>
+          }
+          @if (hasError('price', 'min')) {
+            <span class="form-field__error">Price must be greater than zero.</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="quantity">Quantity</label>
+          <input
+            id="quantity"
+            type="number"
+            min="0"
+            class="form-field__control"
+            [class.form-field__control--invalid]="hasError('quantity', 'min') || hasError('quantity', 'required')"
+            formControlName="quantity" />
+          @if (hasError('quantity', 'required')) {
+            <span class="form-field__error">Quantity is required.</span>
+          }
+          @if (hasError('quantity', 'min')) {
+            <span class="form-field__error">Quantity cannot be negative.</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="categoryId">Category</label>
+        <select
+          id="categoryId"
+          class="form-field__control"
+          [class.form-field__control--invalid]="hasError('categoryId', 'min')"
+          formControlName="categoryId">
+          <option [value]="0" disabled>Select a category</option>
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
+        @if (hasError('categoryId', 'min')) {
+          <span class="form-field__error">A category must be selected.</span>
+        }
+      </div>
+
+      <div class="form-card__actions">
+        <a class="button button--secondary" routerLink="/products">Cancel</a>
+        <button type="submit" class="button button--primary" [disabled]="isSaving()">
+          {{ isSaving() ? 'Saving...' : isEditMode ? 'Save changes' : 'Create product' }}
+        </button>
+      </div>
+    </form>
+  }
+</section>
