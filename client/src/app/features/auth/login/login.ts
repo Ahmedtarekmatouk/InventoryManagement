@@ -1,5 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+﻿import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
@@ -11,17 +10,15 @@ import { NotificationService } from '../../../core/services/notification.service
 export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly notificationService = inject(NotificationService);
-  private readonly router = inject(Router);
 
   readonly isSigningIn = signal(false);
 
-async signIn(): Promise<void> {
+  async signIn(): Promise<void> {
     this.isSigningIn.set(true);
 
     try {
       await this.authService.login();
-    } catch (error) {
-      console.error('MSAL login failed', error);
+    } catch {
       this.notificationService.showError('Sign in was cancelled or failed.');
       this.isSigningIn.set(false);
     }
