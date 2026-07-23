@@ -1,7 +1,6 @@
-﻿
 # Inventory Management System
 
-A full-stack inventory management application built with ASP.NET Core 8 and Angular, implementing CRUD operations for products and categories.
+A full-stack inventory management application built with ASP.NET Core 8 and Angular, implementing CRUD operations for products and categories with single sign-on through Microsoft Entra ID.
 
 ## Technology Stack
 
@@ -11,6 +10,7 @@ A full-stack inventory management application built with ASP.NET Core 8 and Angu
 | Database | SQL Server LocalDB with Entity Framework Core 8 |
 | Frontend | Angular 22 (standalone components, signals) |
 | Styling | SCSS |
+| Authentication | Microsoft Entra ID (OpenID Connect) |
 | Testing | xUnit, Moq, FluentAssertions |
 
 ## Getting Started
@@ -21,24 +21,17 @@ A full-stack inventory management application built with ASP.NET Core 8 and Angu
 - Node.js 20.19 or later
 - SQL Server LocalDB (included with Visual Studio)
 
-### Clone the repository
+### Backend
 
 ```bash
 git clone https://github.com/Ahmedtarekmatouk/InventoryManagement.git
 cd InventoryManagement
-```
-
-### Running the backend
-
-```bash
 dotnet run --project src/InventoryManagement.API
 ```
 
-The database is created and seeded automatically on first run. Swagger is available at `http://localhost:5042/swagger`.
+The database is created and seeded automatically on first run. Swagger is available at `http://localhost:5042/swagger`. If the API starts on a different port, update `apiBaseUrl` in `client/src/environments/environment.development.ts`.
 
-If the API starts on a different port, update `apiBaseUrl` in `client/src/environments/environment.development.ts` to match.
-
-### Running the frontend
+### Frontend
 
 ```bash
 cd client
@@ -46,9 +39,9 @@ npm install
 npm start
 ```
 
-The application is available at `http://localhost:4200`.
+The application runs at `http://localhost:4200`. Test account credentials are provided in the submission email.
 
-### Running the tests
+### Tests
 
 ```bash
 dotnet test
@@ -66,9 +59,12 @@ tests/
 └── InventoryManagement.Tests           Unit tests for application services
 client/                                 Angular application
 ```
+
 Dependencies point inward: the API depends on Application, Infrastructure implements interfaces defined in Application, and Domain depends on nothing.
 
 ## API Endpoints
+
+All endpoints require a valid bearer token.
 
 | Method | Route | Description |
 |---|---|---|
@@ -85,34 +81,44 @@ Dependencies point inward: the API depends on Application, Infrastructure implem
 
 ## Architecture Decisions
 
-**Clean Architecture over a single project.** Business rules live in the Application layer with no knowledge of EF Core or ASP.NET. Replacing SQL Server would require a new repository implementation and one dependency injection change, with no impact on business logic.
+**Clean architecture.** Business rules live in the Application layer with no knowledge of EF Core or ASP.NET. Repository interfaces are defined in Application and implemented in Infrastructure, so services can be unit tested without a database and the data store can be replaced without touching business logic.
 
-**Repository interfaces in Application, implementations in Infrastructure.** The Application layer owns the contract it needs; Infrastructure fulfills it. This keeps dependencies pointing inward and allows services to be unit tested without a database.
+**Services throw, middleware translates.** Services raise `NotFoundException` and `ConflictException` rather than returning status codes. A single middleware maps them to HTTP responses and returns a generic message for unexpected failures while logging the detail. Controllers stay at two or three lines each.
 
-**Explicit repository methods over a generic repository.** Methods such as `ExistsWithNameAsync` state their intent. A generic repository taking expression trees would leak query construction into the service layer.
+**Rules live where they cannot be bypassed.** Soft-deleted products are filtered by an EF Core query filter rather than a condition repeated in each query; page size is clamped inside the query parameter object rather than in the controller; audit timestamps are set in `SaveChangesAsync`.
 
-**Manual mapping over AutoMapper.** Mapping is handled by extension methods. Renaming a property produces a compile-time error rather than a silent runtime mismatch, and it avoids a dependency for roughly forty lines of code.
+**Cancellation tokens throughout the async chain.** A cancelled request propagates from the controller to the database, releasing the thread and connection instead of computing a result nobody will receive.
 
-**Domain exceptions over status codes in services.** Services throw `NotFoundException` and `ConflictException`. A single middleware maps them to HTTP responses, so services remain usable outside a web context.
+**Signals for frontend state.** Component state is managed with Angular Signals. HTTP errors are handled centrally through an interceptor and re-thrown so components only reset their own loading state.
 
-**Soft delete for products, hard delete for categories.** Products carry transactional history and are marked as deleted, filtered out globally by an EF Core query filter. Categories are reference data and cannot be deleted while products reference them.
+**Custom SCSS over a component library.** Design tokens, mixins and BEM-named classes are defined in `client/src/styles`. Shared patterns such as tables and form cards are global; component stylesheets contain only what is unique to that component.
 
-**Signals for frontend state.** Angular 22 applications are zoneless by default, so component state that drives the view is held in signals.
+## Single Sign-On
 
-**Global HTTP error interceptor.** Error notifications are handled once in an interceptor rather than in each component. Errors are re-thrown so components can still reset their own loading state.
+SSO is implemented with Microsoft Entra ID using OpenID Connect with the authorization code flow and PKCE. ADFS was recommended but requires a Windows Server domain that was not available; Entra ID implements the same protocol, so moving to ADFS would change the authority URL and token validation parameters, not the application code.
 
-**Custom SCSS over a component library.** Design tokens, mixins, and BEM-named component classes are defined in `client/src/styles`. Shared patterns such as tables and form cards are global; component stylesheets contain only what is unique to that component.
+Two registrations are used: the API as the protected resource exposing an `access_as_user` scope, and the Angular client as a public client requesting it. No client secret exists, since a browser cannot hold one securely.
+
+The API validates tokens with the standard JWT bearer handler. The client acquires tokens silently and attaches them in an HTTP interceptor, so no component handles a token directly. Route guards protect the application shell, but the API enforces authorization independently — the guards are a user-experience concern, not the security boundary.
 
 ## Third-party Libraries
 
 | Library | Reason |
 |---|---|
-| FluentValidation | Validation rules as separate testable classes, keeping DTOs free of attributes and complex rules readable |
+| FluentValidation | Validation rules as separate testable classes, keeping DTOs free of attributes |
+| Microsoft.Identity.Web | Configures the JWT bearer handler with the Entra authority, audience and signing key rotation |
 | Moq | Substitutes repository interfaces so service tests run without a database |
 | FluentAssertions | Assertion failures state the expected value, which shortens diagnosis |
+| @azure/msal-browser | OIDC authorization code flow with PKCE in the browser. The Angular wrapper does not yet support Angular 22, so the service, guards and interceptor are written against the core library |
 
-No UI component library, object mapper, or logging framework was added; the built-in equivalents were sufficient for this scope.
+No UI component library, object mapper or logging framework was added; the built-in equivalents were sufficient for this scope.
 
 ## Testing
 
-Unit tests cover the business rules of `ProductService` and `CategoryService`: not-found handling, duplicate name detection, category existence checks, soft delete behavior, and paging metadata. Repositories are mocked, so no database is required.
+Unit tests cover the business rules of `ProductService` and `CategoryService`: not-found handling, duplicate name detection, category existence checks, soft delete behavior and paging metadata. Repositories are mocked, so the suite runs without a database.
+
+## Future Improvements
+
+- Integration tests covering the controllers and middleware
+- Role-based authorization using Entra ID app roles
+- Correlation identifiers in error responses to link a client error to a server log entry
