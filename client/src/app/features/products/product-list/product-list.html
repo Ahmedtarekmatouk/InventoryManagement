@@ -43,25 +43,25 @@
           <table class="table">
             <thead>
               <tr>
-                <th>
-                  <button type="button" class="table__sort" (click)="sortBy('name')">
-                    Name
-                    @if (isSortedBy('name')) { <span>{{ sortDescending ? '▼' : '▲' }}</span> }
-                  </button>
-                </th>
+<th>
+  <button type="button" class="table__sort" [class.table__sort--active]="isSortedBy('name')" (click)="sortBy('name')">
+    Name
+    <span class="table__sort-icon">{{ isSortedBy('name') ? (sortDescending ? '↓' : '↑') : '↕' }}</span>
+  </button>
+</th>
                 <th>Category</th>
-                <th>
-                  <button type="button" class="table__sort" (click)="sortBy('price')">
-                    Price
-                    @if (isSortedBy('price')) { <span>{{ sortDescending ? '▼' : '▲' }}</span> }
-                  </button>
-                </th>
-                <th>
-                  <button type="button" class="table__sort" (click)="sortBy('quantity')">
-                    Quantity
-                    @if (isSortedBy('quantity')) { <span>{{ sortDescending ? '▼' : '▲' }}</span> }
-                  </button>
-                </th>
+<th>
+  <button type="button" class="table__sort" [class.table__sort--active]="isSortedBy('price')" (click)="sortBy('price')">
+    Price
+    <span class="table__sort-icon">{{ isSortedBy('price') ? (sortDescending ? '↓' : '↑') : '↕' }}</span>
+  </button>
+</th>
+<th>
+  <button type="button" class="table__sort" [class.table__sort--active]="isSortedBy('quantity')" (click)="sortBy('quantity')">
+    Quantity
+    <span class="table__sort-icon">{{ isSortedBy('quantity') ? (sortDescending ? '↓' : '↑') : '↕' }}</span>
+  </button>
+</th>
                 <th class="table__actions-header">Actions</th>
               </tr>
             </thead>
