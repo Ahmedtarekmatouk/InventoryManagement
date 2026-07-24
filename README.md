@@ -2,6 +2,12 @@
 
 A full-stack inventory management application built with ASP.NET Core 8 and Angular, implementing CRUD operations for products and categories with single sign-on through Microsoft Entra ID.
 
+![Sign in](https://github.com/user-attachments/assets/a10762e6-1305-435c-89fb-136aa7fd8f8d)
+
+![Product list](https://github.com/user-attachments/assets/7fddd3fb-9ecb-46bb-a15b-544df1b5daba)
+
+![Category list](https://github.com/user-attachments/assets/01b1eecf-e960-431e-8738-87b06d1fbc57)
+
 ## Technology Stack
 
 | Layer | Technology |
@@ -95,7 +101,7 @@ All endpoints require a valid bearer token.
 
 ## Single Sign-On
 
-SSO is implemented with Microsoft Entra ID using OpenID Connect with the authorization code flow and PKCE. ADFS was recommended but requires a Windows Server domain that was not available; Entra ID implements the same protocol, so moving to ADFS would change the authority URL and token validation parameters, not the application code.
+SSO is implemented with Microsoft Entra ID using OpenID Connect with the authorization code flow and PKCE. ADFS was recommended; both implement OpenID Connect, so the authentication flow and application code are identical and only the identity provider configuration differs. Entra ID was chosen so the sign-in flow can be tested directly by a reviewer.
 
 Two registrations are used: the API as the protected resource exposing an `access_as_user` scope, and the Angular client as a public client requesting it. No client secret exists, since a browser cannot hold one securely.
 
